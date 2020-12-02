@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <canvas id='canvas' width='800' height="600">
+
+    </canvas>
+    
+    <script>
+        const canvas = document.querySelector("#canvas");
+        const ctx = canvas.getContext("2d");
+        var ballx = 0;
+        var bally = 0;
+        var ballSpeedx = 10;
+        var ballSpeedy = 10;
+
+        let paddle1Y = 300
+        let paddleHeight = 100
+
+        window.onload = () => {
+
+            canvas.addEventListener("mousemove", (event)=>{
+
+                let mousePos = pozycjamyszy(event)
+                paddle1Y = mousePos.y - paddleHeight/2
+                
+            })
+            
+            setInterval(() => {
+               drawMovie()
+               drawEverything()
+               //fillText()
+               //pozycjamyszy()
+           
+
+            
+                
+            ctx.font = "italic bold 50px Arial";
+            ctx.fillStyle = 'white'
+            
+
+            // ruch paletki -myszką
+            //canvas.addEventListener("mousemove", (event)=>{
+            //paddle1Y = mousePos.y - paddleHeight/2 
+            // }
+                //let mousePos = pozycjamyszy(event)
+            
+            
+                
+            
+
+            },1000/60)
+
+
+           
+
+
+        }
+
+        const fillText = () => {
+                ctx.font = "italic bold 50px Arial";
+                ctx.fillStyle = 'white'
+                ctx.fillText("Nasza gra jest fajna", 10, 60);
+                ctx.fillText(ballx, 20, 60);
+                ctx.fillText(bally, 20, 100);
+            
+                ctx.fillText(paddle1Y, 400,400);
+            
+        }
+
+
+        const ballReset = () => {
+            ballx = 400;
+            bally = 300;
+            ballSpeedx = 10;
+        }
+
+        const drawMovie = () => {
+            ballx = ballx + ballSpeedx;
+            bally = bally + ballSpeedy;
+            
+            if (ballx > 790){
+                ballSpeedx = - 10;
+            }
+            if (ballx < 0){
+                if (bally > paddle1Y & bally < paddle1Y + paddleHeight){
+                ballSpeedx = -ballSpeedx
+                } else {
+                    ballReset();
+                }
+            }
+            if (bally > 590){
+                ballSpeedy = - 10
+            }
+            if (bally < 0){
+                ballSpeedy = 10
+            }
+            
+        }
+
+
+        const pozycjamyszy = (event) => {
+            let gameRect = canvas.getBoundingClientRect()
+            let root = document.documentElement
+
+            let mouseX = event.clientX - gameRect.left - root.scrollLeft
+            let mouseY = event.clientY - gameRect.top - root.scrollTop
+
+            return {x: mouseX, y: mouseY}
+        }
+
+        const drawEverything = () => {
+            //console.log('drawEverything')
+            //ballx = ballx + 10
+            // rysowanie tła
+            ctx.fillStyle = 'black'
+            ctx.fillRect(0,0,800,600)
+            
+            // rysowanie piłki
+            ctx.fillStyle = 'green'
+            ctx.beginPath()
+            ctx.arc(ballx, bally, 10, 0, Math.PI *2)
+            ctx.fill()
+            //ctx.fillRect(ballx, bally, 10, 10)
+            //ctx.arc(10, 7, 5, 0, 2)
+            // rysowanie paletki
+            ctx.fillStyle = 'white';
+            ctx.fillRect(10,paddle1Y,10,paddleHeight)
+        
+        }
+
+    </script>
+</body>
+
+</html>
